@@ -1,4 +1,4 @@
-package com.example.Chyl.Entities;
+package com.example.Chyl.Model;
 
 import java.util.Date;
 
