@@ -7,7 +7,6 @@ import com.example.Chyl.Model.Enum.PersonalEnum;
 import com.example.Chyl.Services.PersonalCatService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.QueryHints.NoHints;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
