@@ -2,6 +2,8 @@ package com.example.Chyl.Controllers;
 
 import com.example.Chyl.Entities.UserModel;
 import com.example.Chyl.Model.UserLogin;
+import com.example.Chyl.Model.Enum.LoginEnum;
+import com.example.Chyl.Model.Enum.RegisterEnum;
 import com.example.Chyl.Services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,27 +20,33 @@ public class UserController {
     UserService service;
 
     @PostMapping("/register")
-    public UserModel saveUser(@RequestBody UserModel user){
+    public RegisterEnum saveUser(@RequestBody UserModel user){
 
-        return service.saveUser(user);
+        if(!service.existsUser(user.getUsername())){
+
+            service.saveUser(user);
+            return RegisterEnum.SUCCESS;
+        }
+
+        return RegisterEnum.NOT_SUCCESS;
 
     }
 
     @PostMapping("/login")
-    public int loginUser(@RequestBody UserLogin login){
+    public LoginEnum loginUser(@RequestBody UserLogin login){
 
         if(service.existsUser(login.getUsername())){
 
             UserModel user = service.getUserByUsername(login.getUsername());
 
             if(user.getPasswd().equals(login.getPasswd()))
-                return 1;
+                return LoginEnum.SUCCESS;
 
-            return 0;           
+            return LoginEnum.USER_FAIL;           
 
         }
 
-        return -1;
+        return LoginEnum.NOT_EXIST;
 
     }
 

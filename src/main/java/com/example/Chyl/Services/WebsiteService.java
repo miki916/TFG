@@ -39,6 +39,12 @@ public class WebsiteService {
 
     }
 
+    public Boolean existsWebsite(String domain){
+
+        return repository.existsWebsiteByDomain(domain);
+
+    }
+
 
 
 }

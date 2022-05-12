@@ -3,6 +3,7 @@ package com.example.Chyl.Controllers;
 import java.util.List;
 
 import com.example.Chyl.Entities.*;
+import com.example.Chyl.Model.MarkerModel;
 import com.example.Chyl.Services.MarkerService;
 import com.example.Chyl.Services.UserService;
 import com.example.Chyl.Services.WebsiteService;
@@ -35,13 +36,11 @@ public class MarkerController {
 
     }
 
-    @GetMapping("/get/{idUser}/{idWeb}")
-    public List<Marker> getMarkerByUserAndWeb(@RequestParam("idUser") Long iduser , @RequestParam("idWeb") Long idweb){
+    @PostMapping("/get")
+    public List<Marker> getMarkerByUserAndWeb(@RequestBody MarkerModel userWebsite){
 
-        UserModel user = userService.getUserById(iduser);
-        Website website = webService.getWebsiteById(idweb);
-
-        return markerService.getAllMarkerByUserAndMarker(user, website);
+       
+        return markerService.getAllMarkerByUserAndMarker(userWebsite.getUser(), userWebsite.getWebsite());
 
     }
 }

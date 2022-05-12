@@ -3,6 +3,7 @@ package com.example.Chyl.Controllers;
 import java.util.List;
 
 import com.example.Chyl.Entities.*;
+import com.example.Chyl.Model.Enum.WebsiteEnum;
 import com.example.Chyl.Services.WebsiteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,17 @@ public class WebsiteController {
     WebsiteService service;
 
     @PostMapping("/save")
-    public Website saveWebsite(@RequestBody Website website){
+    public WebsiteEnum saveWebsite(@RequestBody Website website){
         
-        return service.saveWebsite(website);
+        if(!service.existsWebsite(website.getDomain())){
+
+            service.saveWebsite(website);
+
+            return WebsiteEnum.SUCCESS;
+
+        }
+
+        return WebsiteEnum.NOT_SUCCESS;
 
     }
 

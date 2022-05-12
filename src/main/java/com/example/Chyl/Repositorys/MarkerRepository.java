@@ -13,5 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface MarkerRepository extends JpaRepository<Marker,Long> {
     
     List<Marker> findAllMarkerByUserModelAndWebsite(UserModel user, Website website);
+    
     Marker findOneMarkerById(Long id);
 }
