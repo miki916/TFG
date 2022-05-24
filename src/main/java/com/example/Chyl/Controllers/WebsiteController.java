@@ -2,11 +2,13 @@ package com.example.Chyl.Controllers;
 
 import java.util.List;
 
-import com.example.Chyl.Entities.*;
+import com.example.Chyl.Entities.Category;
+import com.example.Chyl.Entities.Website;
 import com.example.Chyl.Model.Enum.WebsiteEnum;
 import com.example.Chyl.Services.WebsiteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api/website")
 public class WebsiteController {
     

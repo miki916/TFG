@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PersonalCatRepository extends JpaRepository<PersonalCategory, Long> {
     
-    List<PersonalCategory> findAllPersonalCategoryByType(int type);
+    List<PersonalCategory> findAllPersonalCategoryByTypeAndUser(int type,UserModel user);
 
     PersonalCategory findOnePersonalCategoryById(Long id);
 
-    Boolean existsPersonalCategoryByUserModelAndWebsite(UserModel user, Website website);
+    Boolean existsPersonalCategoryByUserAndWebsite(UserModel user, Website website);
 
 }

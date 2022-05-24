@@ -20,13 +20,13 @@ public class PersonalCatService {
 
     }
 
-    public List<PersonalCategory> getPersonalCatByType(int type){
+    public List<PersonalCategory> getPersonalCatByTypeAndUser(int type, UserModel user){
 
-        return repository.findAllPersonalCategoryByType(type);
+        return repository.findAllPersonalCategoryByTypeAndUser(type,user);
 
     }
 
-    public PersonalCategory getPersonalCatById(Long id){
+    public PersonalCategory getPersonalCatById(Long id,UserModel user){
 
         return repository.findOnePersonalCategoryById(id);
 
@@ -34,7 +34,7 @@ public class PersonalCatService {
 
     public Boolean existsPersonalCat(UserModel user, Website website){
 
-        return repository.existsPersonalCategoryByUserModelAndWebsite(user, website);
+        return repository.existsPersonalCategoryByUserAndWebsite(user, website);
 
     }
 

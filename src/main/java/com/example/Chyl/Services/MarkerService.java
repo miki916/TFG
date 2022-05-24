@@ -24,7 +24,7 @@ public class MarkerService {
 
     public List<Marker> getAllMarkerByUserAndMarker(UserModel user, Website website){
 
-        return repository.findAllMarkerByUserModelAndWebsite(user, website);
+        return repository.findAllMarkerByUserAndWebsite(user, website);
 
     }
 
