@@ -24,22 +24,23 @@ public class PersonalCatController {
 
     @PostMapping("/save")
     public PersonalEnum saveCategory(@RequestBody PersonalCategory category){
-
-       // if(service.existsPersonalCat(category.getUser(), category.getWebsite())){
-
-            service.savePersonalCat(category);
-            return PersonalEnum.SUCCESS;
-
-       // }
-
-       // return PersonalEnum.NOT_SUCCESS;
+       
+        service.savePersonalCat(category);
+        return PersonalEnum.SUCCESS;
 
     }
 
     @PostMapping("get")
     public List<PersonalCategory> getByType(@RequestBody PersonalCatMode pCat){
-
+        
         return service.getPersonalCatByTypeAndUser(pCat.getIdtype(),pCat.getUser());
+
+    }
+
+    @PostMapping("exists")
+    public Boolean existsCat(@RequestBody PersonalCategory category){
+
+        return service.existsPersonalCat(category.getUser(), category.getWebsite());
 
     }
 

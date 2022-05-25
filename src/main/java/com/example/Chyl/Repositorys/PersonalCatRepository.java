@@ -16,4 +16,5 @@ public interface PersonalCatRepository extends JpaRepository<PersonalCategory, L
 
     Boolean existsPersonalCategoryByUserAndWebsite(UserModel user, Website website);
 
+    List<PersonalCategory> findAllPersonalCategoriesByUser(UserModel user);
 }

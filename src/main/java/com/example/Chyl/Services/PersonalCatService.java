@@ -38,4 +38,10 @@ public class PersonalCatService {
 
     }
 
+    public List<PersonalCategory> findPersonalCatByUser(UserModel user){
+
+        return repository.findAllPersonalCategoriesByUser(user);
+
+    }
+
 }

@@ -14,4 +14,5 @@ public interface WebsiteRepository extends JpaRepository<Website, Long>{
     List<Website> findAllWebsiteByCategory(Category category);
     Website findOneWebsiteById(Long id);
     Boolean existsWebsiteByDomain(String domain);
+    
 }
