@@ -16,13 +16,7 @@ class ChylApplicationTests {
 	@Test
 	void contextLoads() {
 
-		UserModel user = new UserModel();
-
-		user.setUsername("Miguel");
-		user.setPasswd("123");
-
-		repo.save(user);
-
+		
 
 
 	}

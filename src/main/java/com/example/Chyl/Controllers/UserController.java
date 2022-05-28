@@ -25,8 +25,10 @@ public class UserController {
     @PostMapping("/register")
     public RegisterEnum saveUser(@RequestBody UserModel user){
 
+        // Si existe el usuario con el mismo nombre de usuario devuelve un NOT_SUCCESS
         if(!service.existsUser(user.getUsername())){
 
+            // Encriptamos la contraseña y guardamos el usuario
             user.setPasswd(PasswordHash.hash(user.getPasswd()));
             service.saveUser(user);
             return RegisterEnum.SUCCESS;
@@ -39,10 +41,14 @@ public class UserController {
     @PostMapping("/login")
     public UserModel loginUser(@RequestBody UserLogin login){
 
+        // Si existe el usuario con el mismo nombre de usuario devuelve un null     
         if(service.existsUser(login.getUsername())){
 
+            // Busca el usuario en la base de datos
             UserModel user = service.getUserByUsername(login.getUsername());
 
+            // Utiliza la función de la clase PasswordHash y compara las contraseñas, si 
+            // no son iguales devuelve un null
             if(PasswordHash.decrypt(user.getPasswd(), login.getPasswd()))
                 return user;
 

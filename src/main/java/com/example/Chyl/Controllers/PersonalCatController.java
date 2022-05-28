@@ -25,6 +25,7 @@ public class PersonalCatController {
     @PostMapping("/save")
     public PersonalEnum saveCategory(@RequestBody PersonalCategory category){
        
+        // Guardas la categoria que le pasas por el body
         service.savePersonalCat(category);
         return PersonalEnum.SUCCESS;
 

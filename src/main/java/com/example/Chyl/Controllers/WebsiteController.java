@@ -1,5 +1,8 @@
 package com.example.Chyl.Controllers;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,8 +12,13 @@ import com.example.Chyl.Entities.UserModel;
 import com.example.Chyl.Entities.Website;
 import com.example.Chyl.Model.PersonalCatMode;
 import com.example.Chyl.Model.Enum.WebsiteEnum;
+import com.example.Chyl.Services.CategoryService;
 import com.example.Chyl.Services.PersonalCatService;
 import com.example.Chyl.Services.WebsiteService;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping("api/website")
 public class WebsiteController {
-    
+
     @Autowired
     WebsiteService service;
 
@@ -33,15 +41,28 @@ public class WebsiteController {
 
     @Autowired
     WebsiteService websiteService;
-    
+
+    @Autowired
+    CategoryService catService;
+
     @PostMapping("/save")
-    public WebsiteEnum saveWebsite(@RequestBody Website website){
-        
-        if(!service.existsWebsite(website.getDomain())){
+    public WebsiteEnum saveWebsite(@RequestBody Website website) {
 
-            service.saveWebsite(website);
+        // Si el dominio ya está guardado devuelve un NOT_SUCESS
+        if (!service.existsWebsite(website.getDomain())) {
+            try {
+                HttpResponse<String> response = Unirest.get(website.getDomain()).asString();
 
-            return WebsiteEnum.SUCCESS;
+                if (response.getStatus() > 199 && response.getStatus() < 300) {
+
+                    service.saveWebsite(website);
+                    return WebsiteEnum.SUCCESS;
+
+                } 
+
+            } catch (UnirestException e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -50,40 +71,56 @@ public class WebsiteController {
     }
 
     @GetMapping("/get/all")
-    public List<Website> getAllWebsite(){
+    public List<Website> getAllWebsite() {
 
         return service.getAllWebsite();
 
     }
 
     @PostMapping("/get/favorites")
-    public List<Website> getWebsitesNotFavorites(@RequestBody PersonalCatMode pCat){
+    public List<Website> getWebsitesNotFavorites(@RequestBody PersonalCatMode pCat) {
 
         List<Website> list = service.getAllWebsite();
-        List<Website> listUser = personalService.getPersonalCatByTypeAndUser(pCat.getIdtype(),pCat.getUser()).stream().map(n -> n.getWebsite()).collect(Collectors.toList());
+        List<Website> listUser = personalService.getPersonalCatByTypeAndUser(pCat.getIdtype(), pCat.getUser()).stream()
+                .map(n -> n.getWebsite()).collect(Collectors.toList());
         list.removeAll(listUser);
         return list;
 
     }
 
+    public List<Website> getWebsiteUserFav(Category category) {
+
+        return personalService.getPersonalCatByCategory(category).stream().distinct().collect(Collectors.toList());
+
+    }
+
     @PostMapping("/get/cat")
-    public List<Website> getAllWebsiteByCat(@RequestBody Category category){
+    public List<Website> getAllWebsiteByCat(@RequestBody Category category) {
 
         return service.getAllWebsiteByCategory(category);
 
     }
 
     @PostMapping("/get/recomendations")
-    public List<Website> getRecomendations(@RequestBody UserModel user){
+    public List<Website> getRecomendations(@RequestBody UserModel user) {
 
-        List<Category> catUser = personalService.findPersonalCatByUser(user).stream().map(n -> n.getWebsite().getCategory()).collect(Collectors.toList());
-        List<Website> webUser = personalService.findPersonalCatByUser(user).stream().map(n -> n.getWebsite()).collect(Collectors.toList());
+        // Recogemos las categorias según los gustos del usuario
+        List<Category> catUser = personalService.findPersonalCatByUser(user).stream()
+                .map(n -> n.getWebsite().getCategory()).distinct().collect(Collectors.toList());
+
+
+        // Recogemos todas las webs que el usuario ha dado a fav
+        List<Website> webUser = personalService.findPersonalCatByUser(user).stream()
+                .map(n -> n.getWebsite()).collect(Collectors.toList());
+
         List<Website> webCat = new ArrayList<Website>();
 
-        catUser.forEach(cat -> webCat.addAll(websiteService.getAllWebsiteByCategory(cat)));
-        //webCat.removeAll(webUser);
+        // X cada categoria guardamos en la lista las
+        // webs que pertenezcan a esa categoria y que alguien haya dado a fav
+        catUser.forEach(cat -> webCat.addAll(getWebsiteUserFav(cat)));
+        webCat.removeAll(webUser);
 
         return webCat;
-        
+
     }
 }
