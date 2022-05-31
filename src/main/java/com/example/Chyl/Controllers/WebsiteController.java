@@ -107,21 +107,6 @@ public class WebsiteController {
     @PostMapping("/get/recomendations")
     public List<Website> getRecomendations(@RequestBody UserModel user) {
 
-        // // Recogemos las categorias según los gustos del usuario
-        // List<Category> catUser = personalService.findPersonalCatByUser(user).stream()
-        //         .map(n -> n.getWebsite().getCategory()).distinct().collect(Collectors.toList());
-
-        // // Recogemos todas las webs que el usuario ha dado a fav
-        // List<Website> webUser = personalService.findPersonalCatByUser(user).stream()
-        //         .map(n -> n.getWebsite()).collect(Collectors.toList());
-
-        // List<Website> webCat = new ArrayList<Website>();
-
-        // // X cada categoria guardamos en la lista las
-        // // webs que pertenezcan a esa categoria y que alguien haya dado a fav
-        // catUser.forEach(cat -> webCat.addAll(getWebsiteUserFav(cat)));
-        // webCat.removeAll(webUser);
-
         return service.getRecomendations(user);
 
     }
