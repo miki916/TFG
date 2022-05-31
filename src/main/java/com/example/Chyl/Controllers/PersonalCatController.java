@@ -6,6 +6,9 @@ import com.example.Chyl.Entities.PersonalCategory;
 import com.example.Chyl.Model.PersonalCatMode;
 import com.example.Chyl.Model.Enum.PersonalEnum;
 import com.example.Chyl.Services.PersonalCatService;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,8 +29,27 @@ public class PersonalCatController {
     public PersonalEnum saveCategory(@RequestBody PersonalCategory category){
        
         // Guardas la categoria que le pasas por el body
-        service.savePersonalCat(category);
-        return PersonalEnum.SUCCESS;
+        if(!service.existsPersonalCat(category.getUser(), category.getWebsite())){
+
+            try {
+                
+                HttpResponse<String> response = Unirest.get(category.getHomePage()).asString();
+
+                if (response.getStatus() > 199 && response.getStatus() < 300) {
+
+                    service.savePersonalCat(category);
+                    return PersonalEnum.SUCCESS;
+
+                } 
+
+            } catch (UnirestException e) {
+                e.printStackTrace();
+            }
+            
+
+        }
+        
+        return PersonalEnum.NOT_SUCCESS;
 
     }
 

@@ -27,6 +27,12 @@ public class WebsiteService {
 
     }
 
+    public List<Website> getAllWebsiteByAge(boolean age){
+
+        return repository.findAllWebsiteByMaxAge(age);
+
+    }
+
     public List<Website> getAllWebsiteByCategory(Category category){
 
         return repository.findAllWebsiteByCategory(category);
@@ -42,6 +48,12 @@ public class WebsiteService {
     public Boolean existsWebsite(String domain){
 
         return repository.existsWebsiteByDomain(domain);
+
+    }
+
+    public List<Website> getRecomendations(UserModel user){
+
+        return repository.findRecomendations(user);
 
     }
 
